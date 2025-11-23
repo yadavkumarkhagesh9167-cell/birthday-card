@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday — Bhummii</title>
+  <style>
+    :root{--bg:#0b0720;--accent:#ff4d87;--card-radius:12px}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#070417 0%,var(--bg) 100%);color:#fff;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
+    .book{width:340px;height:460px;perspective:1000px;-webkit-tap-highlight-color:transparent}
+    .sheet{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 700ms cubic-bezier(.2,.8,.2,1);cursor:default;user-select:none}
+    .book.open .sheet{transform:rotateY(-180deg)}
+    .face{position:absolute;inset:0;border-radius:var(--card-radius);box-shadow:0 12px 30px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+    .cover{background:linear-gradient(135deg,#2b0630,#3a0a3f);text-align:center}
+    .cover h1{margin:6px 0 0;color:var(--accent);font-size:30px;letter-spacing:0.6px}
+    .cover h2{margin:0;font-weight:600;font-size:16px;color:#ffd6ea;opacity:.95}
+    .cover p{margin:10px 0 16px;opacity:.95;font-size:14px}
+    .btn{background:var(--accent);border:0;padding:10px 14px;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;font-size:14px}
+    .inside{background:#0e0b1a;transform:rotateY(180deg);padding:18px;gap:8px;align-items:stretch}
+    .inside h3{margin:0 0 10px;color:var(--accent);font-size:16px}
+    #wishes{width:100%;overflow:auto;max-height:260px;padding-right:6px}
+    .wish{background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;margin:8px 0;font-size:14px;line-height:1.3}
+    .controls{margin-top:12px;display:flex;gap:8px;justify-content:flex-end}
+    .small{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px}
+    footer{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:13px;color:#ddd;opacity:.85}
+    @media (max-width:420px){.book{width:300px;height:420px}}
+  </style>
+</head>
+<body>
+  <div class="book" id="book" aria-label="Birthday card">
+    <div class="sheet" id="sheet">
+      <section class="face cover" aria-hidden="false">
+        <h2>Happy Birthday</h2>
+        <h1 id="cover-name">Bhummii</h1>
+        <p>Wishing you a day full of magic and smiles ✨</p>
+        <button class="btn" id="unlock" aria-label="Unlock the wishes">Unlock the Wishes</button>
+      </section>
+
+      <section class="face inside" aria-hidden="true">
+        <h3 id="inside-title">Wishes for Bhummii</h3>
+        <div id="wishes" role="list">
+          <div class="wish" role="listitem">May your days be bright and your nights be full of stars. 💫</div>
+          <div class="wish" role="listitem">Wishing you love, laughter and endless adventures. ❤️</div>
+          <div class="wish" role="listitem">May every wish you make today come true. ✨</div>
+          <div class="wish" role="listitem">Health, happiness, and success always. 🌟</div>
+          <div class="wish" role="listitem">Keep smiling — you light up the world! 😊</div>
+          <div class="wish" role="listitem">Tu hamesha meri dost rahe, baaki tu samajh gayi hogi 😄</div>
+        </div>
+          <div class="wish" role="listitem">Wishing you love, laughter and endless adventures. ❤️</div>
+          <div class="wish" role="listitem">May every wish you make today come true. ✨</div>
+          <div class="wish" role="listitem">Health, happiness, and success always. 🌟</div>
+          <div class="wish" role="listitem">Keep smiling — you light up the world! 😊</div>
+        </div>
+
+        <div class="controls">
+          <button class="small" id="close" aria-label="Close wishes">Close</button>
+          <button class="small" id="confetti" aria-label="Celebrate">Celebrate</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer>Tip: Press <strong>p</strong> to quickly change the name.</footer>
+
+  <script>
+    const book = document.getElementById('book');
+    const unlock = document.getElementById('unlock');
+    const closeBtn = document.getElementById('close');
+    const confettiBtn = document.getElementById('confetti');
+    const coverName = document.getElementById('cover-name');
+    const insideTitle = document.getElementById('inside-title');
+
+    unlock.addEventListener('click', ()=> book.classList.toggle('open'));
+    closeBtn.addEventListener('click', ()=> book.classList.remove('open'));
+
+    function simpleConfetti(options = {}) {
+      const count = options.count || 40;
+      const rect = book.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const topStart = rect.top + rect.height * 0.25;
+
+      for (let i = 0; i < count; i++) {
+        const d = document.createElement('div');
+        const size = Math.random() * 8 + 6;
+        d.style.position = 'fixed';
+        d.style.left = (centerX + (Math.random() - 0.5) * rect.width * 0.7) + 'px';
+        d.style.top = (topStart + Math.random() * 40) + 'px';
+        d.style.width = size + 'px';
+        d.style.height = size + 'px';
+        d.style.borderRadius = '50%';
+        const colors = ['#ff6b8a','#ffd93d','#9be7ff','#ffa8e6','#b9ffb7'];
+        d.style.background = colors[Math.floor(Math.random()*colors.length)];
+        d.style.zIndex = 9999;
+        document.body.appendChild(d);
+
+        const dx = (Math.random() - 0.5) * 300;
+        const dy = 200 + Math.random() * 160;
+        const rotate = (Math.random() - 0.5) * 720;
+        const dur = 1200 + Math.random() * 900;
+
+        d.animate([
+          { transform: 'translate3d(0,0,0)', opacity: 1 },
+          { transform: `translate3d(${dx}px,${dy}px,0) rotate(${rotate}deg)`, opacity: 0 }
+        ], { duration: dur, easing: 'cubic-bezier(.2,.7,.2,1)' });
+
+        setTimeout(()=> d.remove(), dur + 50);
+      }
+    }
+
+    confettiBtn.addEventListener('click', ()=>{
+      simpleConfetti();
+      setTimeout(()=> book.classList.remove('open'), 1400);
+    });
+
+    window.addEventListener('keydown',(e)=>{
+      if(e.key.toLowerCase()==='p'){
+        const n = prompt('Enter name:', coverName.textContent || 'Bhummii');
+        if(n){ coverName.textContent=n; insideTitle.textContent='Wishes for '+n; }
+      }
+    });
+  </script>
+</body>
+</html>
